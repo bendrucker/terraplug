@@ -13,7 +13,7 @@ type Downloader struct {
 	Target          Target
 }
 
-func (d *Downloader) Download(url string, plugin Plugin) error {
+func (d *Downloader) Download(url string, plugin PluginVersion) error {
 	os.MkdirAll(d.PluginDirectory, 0700)
 
 	resp, err := http.Get(url)
