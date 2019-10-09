@@ -9,7 +9,7 @@ import (
 )
 
 func TestLoadFileSumoLogic(t *testing.T) {
-	config, err := testConfig("sumologic")
+	config, err := testLoadFile("sumologic")
 	if !assert.NoError(t, err) {
 		return
 	}
@@ -26,7 +26,7 @@ func TestLoadFileSumoLogic(t *testing.T) {
 }
 
 func TestLoadFileCt(t *testing.T) {
-	config, err := testConfig("ct")
+	config, err := testLoadFile("ct")
 	if !assert.NoError(t, err) {
 		return
 	}
@@ -39,12 +39,46 @@ func TestLoadFileCt(t *testing.T) {
 	assert.Nil(t, plugin.Replacements)
 }
 
-func testConfig(name string) (*Config, error) {
+func TestLoadSumoLogic(t *testing.T) {
+	config, err := testLoad("sumologic")
+	if !assert.NoError(t, err) {
+		return
+	}
+
+	plugin := config.Plugins[0]
+	assert.Equal(t, []string{"1.x"}, *plugin.Versions)
+}
+
+func TestLoadCt(t *testing.T) {
+	config, err := testLoad("ct")
+	if !assert.NoError(t, err) {
+		return
+	}
+
+	plugin := config.Plugins[0]
+	assert.Equal(t, []string{"0.4"}, *plugin.Versions)
+}
+
+func TestLoadNoProviderError(t *testing.T) {
+	_, err := testLoad("missing-provider")
+	assert.EqualError(t, err, `could not find a Terraform provider configuration named "foo" and no versions were specified`)
+}
+
+func testLoadFile(name string) (*Config, error) {
 	_, filename, _, _ := runtime.Caller(1)
 	return LoadFile(filepath.Join(
 		filepath.Dir(filename),
 		"test",
 		name,
 		ConfigFilename,
+	))
+}
+
+func testLoad(name string) (*Config, error) {
+	_, filename, _, _ := runtime.Caller(1)
+	return Load(filepath.Join(
+		filepath.Dir(filename),
+		"test",
+		name,
 	))
 }

@@ -1,3 +1,1 @@
-plugin "foo" {
-    type = "provider"
-}
+plugin "provider" "foo" {}

@@ -5,20 +5,17 @@ import (
 	"path/filepath"
 )
 
-// Supported plugin types
+// Supported plugin types (https://www.terraform.io/docs/extend/plugin-types.html)
 const (
-	PluginTypeProvider    PluginType = "provider"
-	PluginTypeProvisioner            = "provisioner"
+	PluginTypeProvider    = "provider"
+	PluginTypeProvisioner = "provisioner"
 )
-
-// PluginType describes a Terraform plugin type (https://www.terraform.io/docs/extend/plugin-types.html)
-type PluginType string
 
 // Plugin describes a Terraform plugin
 type Plugin struct {
 	// Name is the short name of the plugin. This is the name of the provider or provisioner.
 	Name string
-	Type PluginType
+	Type string
 }
 
 // PluginVersion describes a Terraform plugin at a specific version
